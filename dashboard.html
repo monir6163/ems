@@ -1,0 +1,413 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Employee Management System - Dashboard</title>
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      body {
+        font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        padding: 20px;
+        min-height: 100vh;
+      }
+
+      .container {
+        max-width: 1400px;
+        margin: 0 auto;
+      }
+
+      header {
+        background: white;
+        padding: 30px;
+        border-radius: 15px;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+        margin-bottom: 30px;
+        text-align: center;
+      }
+
+      h1 {
+        color: #667eea;
+        margin-bottom: 10px;
+      }
+
+      .subtitle {
+        color: #666;
+        font-size: 14px;
+      }
+
+      .database-info {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+        gap: 20px;
+        margin-bottom: 30px;
+      }
+
+      .db-card {
+        background: white;
+        padding: 25px;
+        border-radius: 15px;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+        transition: transform 0.3s ease;
+      }
+
+      .db-card:hover {
+        transform: translateY(-5px);
+      }
+
+      .db-card h2 {
+        color: #667eea;
+        margin-bottom: 15px;
+        font-size: 20px;
+      }
+
+      .db-card .db-name {
+        font-weight: bold;
+        color: #764ba2;
+        font-size: 16px;
+        margin-bottom: 10px;
+      }
+
+      .db-card .description {
+        color: #666;
+        font-size: 14px;
+        margin-bottom: 15px;
+      }
+
+      .status {
+        display: inline-block;
+        padding: 5px 15px;
+        border-radius: 20px;
+        font-size: 12px;
+        font-weight: bold;
+      }
+
+      .status.connected {
+        background: #4caf50;
+        color: white;
+      }
+
+      .status.disconnected {
+        background: #f44336;
+        color: white;
+      }
+
+      .endpoints {
+        background: white;
+        padding: 25px;
+        border-radius: 15px;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+        margin-bottom: 30px;
+      }
+
+      .endpoints h2 {
+        color: #667eea;
+        margin-bottom: 20px;
+      }
+
+      .endpoint-list {
+        display: grid;
+        gap: 15px;
+      }
+
+      .endpoint-item {
+        background: #f5f5f5;
+        padding: 15px;
+        border-radius: 10px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+      }
+
+      .endpoint-item .method {
+        font-weight: bold;
+        color: white;
+        padding: 5px 10px;
+        border-radius: 5px;
+        font-size: 12px;
+      }
+
+      .method.get {
+        background: #2196f3;
+      }
+      .method.post {
+        background: #4caf50;
+      }
+      .method.put {
+        background: #ff9800;
+      }
+      .method.delete {
+        background: #f44336;
+      }
+
+      .endpoint-item .path {
+        flex-grow: 1;
+        margin: 0 15px;
+        font-family: monospace;
+        color: #333;
+      }
+
+      .endpoint-item .description {
+        color: #666;
+        font-size: 13px;
+      }
+
+      .features {
+        background: white;
+        padding: 25px;
+        border-radius: 15px;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+      }
+
+      .features h2 {
+        color: #667eea;
+        margin-bottom: 20px;
+      }
+
+      .feature-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+        gap: 20px;
+      }
+
+      .feature-card {
+        padding: 20px;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        border-radius: 10px;
+        color: white;
+      }
+
+      .feature-card h3 {
+        margin-bottom: 10px;
+        font-size: 18px;
+      }
+
+      .feature-card ul {
+        list-style: none;
+        font-size: 14px;
+      }
+
+      .feature-card li {
+        padding: 5px 0;
+        padding-left: 20px;
+        position: relative;
+      }
+
+      .feature-card li:before {
+        content: "✓";
+        position: absolute;
+        left: 0;
+        font-weight: bold;
+      }
+
+      .test-section {
+        background: white;
+        padding: 25px;
+        border-radius: 15px;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+        margin-top: 30px;
+        text-align: center;
+      }
+
+      .test-section h2 {
+        color: #667eea;
+        margin-bottom: 20px;
+      }
+
+      .test-button {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+        border: none;
+        padding: 15px 40px;
+        border-radius: 30px;
+        font-size: 16px;
+        font-weight: bold;
+        cursor: pointer;
+        transition: transform 0.3s ease;
+      }
+
+      .test-button:hover {
+        transform: scale(1.05);
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <header>
+        <h1>🏢 Employee Management System</h1>
+        <p class="subtitle">Database Fragmentation Architecture</p>
+      </header>
+
+      <div class="database-info">
+        <div class="db-card">
+          <h2>📁 Database 1</h2>
+          <div class="db-name">Departments Database</div>
+          <div class="description">
+            Stores all department information including names, descriptions,
+            managers, and locations
+          </div>
+          <span class="status connected" id="db1-status">Connected</span>
+        </div>
+
+        <div class="db-card">
+          <h2>💻 Database 2</h2>
+          <div class="db-name">IT Employees Database</div>
+          <div class="description">
+            Manages IT department employee data with skills, projects, and
+            technical details
+          </div>
+          <span class="status connected" id="db2-status">Connected</span>
+        </div>
+
+        <div class="db-card">
+          <h2>👥 Database 3</h2>
+          <div class="db-name">HR Employees Database</div>
+          <div class="description">
+            Handles HR department employee records including specializations and
+            certifications
+          </div>
+          <span class="status connected" id="db3-status">Connected</span>
+        </div>
+      </div>
+
+      <div class="endpoints">
+        <h2>📡 API Endpoints</h2>
+        <div class="endpoint-list">
+          <div class="endpoint-item">
+            <span class="method get">GET</span>
+            <span class="path">/api/departments</span>
+            <span class="description">Get all departments</span>
+          </div>
+          <div class="endpoint-item">
+            <span class="method post">POST</span>
+            <span class="path">/api/departments</span>
+            <span class="description">Create new department</span>
+          </div>
+          <div class="endpoint-item">
+            <span class="method get">GET</span>
+            <span class="path">/api/it-employees</span>
+            <span class="description">Get all IT employees</span>
+          </div>
+          <div class="endpoint-item">
+            <span class="method post">POST</span>
+            <span class="path">/api/it-employees</span>
+            <span class="description">Create new IT employee</span>
+          </div>
+          <div class="endpoint-item">
+            <span class="method get">GET</span>
+            <span class="path">/api/hr-employees</span>
+            <span class="description">Get all HR employees</span>
+          </div>
+          <div class="endpoint-item">
+            <span class="method post">POST</span>
+            <span class="path">/api/hr-employees</span>
+            <span class="description">Create new HR employee</span>
+          </div>
+          <div class="endpoint-item">
+            <span class="method get">GET</span>
+            <span class="path">/health</span>
+            <span class="description">Check system health</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="features">
+        <h2>✨ Key Features</h2>
+        <div class="feature-grid">
+          <div class="feature-card">
+            <h3>Database Fragmentation</h3>
+            <ul>
+              <li>Horizontal data splitting</li>
+              <li>Department-based separation</li>
+              <li>Independent scaling</li>
+              <li>Optimized queries</li>
+            </ul>
+          </div>
+
+          <div class="feature-card">
+            <h3>Department Management</h3>
+            <ul>
+              <li>CRUD operations</li>
+              <li>Manager tracking</li>
+              <li>Location management</li>
+              <li>Real-time updates</li>
+            </ul>
+          </div>
+
+          <div class="feature-card">
+            <h3>IT Employee Management</h3>
+            <ul>
+              <li>Skills tracking</li>
+              <li>Project assignments</li>
+              <li>Search by skills</li>
+              <li>Performance metrics</li>
+            </ul>
+          </div>
+
+          <div class="feature-card">
+            <h3>HR Employee Management</h3>
+            <ul>
+              <li>Specialization tracking</li>
+              <li>Certification records</li>
+              <li>Search capabilities</li>
+              <li>Employee analytics</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <div class="test-section">
+        <h2>🧪 Quick Test</h2>
+        <p style="color: #666; margin-bottom: 20px">
+          Test the API with sample data
+        </p>
+        <button
+          class="test-button"
+          onclick="window.open('http://localhost:5000/health', '_blank')"
+        >
+          Check System Health
+        </button>
+      </div>
+    </div>
+
+    <script>
+      // Check database status on load
+      async function checkDatabaseStatus() {
+        try {
+          const response = await fetch("http://localhost:5000/health");
+          const data = await response.json();
+
+          // Update status indicators
+          updateStatus("db1-status", data.databases.db1);
+          updateStatus("db2-status", data.databases.db2);
+          updateStatus("db3-status", data.databases.db3);
+        } catch (error) {
+          console.error("Error checking database status:", error);
+        }
+      }
+
+      function updateStatus(elementId, status) {
+        const element = document.getElementById(elementId);
+        if (status === "Connected") {
+          element.className = "status connected";
+          element.textContent = "Connected";
+        } else {
+          element.className = "status disconnected";
+          element.textContent = "Disconnected";
+        }
+      }
+
+      // Check status on page load
+      checkDatabaseStatus();
+
+      // Refresh status every 10 seconds
+      setInterval(checkDatabaseStatus, 10000);
+    </script>
+  </body>
+</html>
