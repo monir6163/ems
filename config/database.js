@@ -54,4 +54,18 @@ db3.on("error", (err) => {
   console.error("❌ DB3 connection error:", err);
 });
 
-module.exports = { db1, db2, db3 };
+// Database 4: Finance Department Employees
+const db4 = mongoose.createConnection(
+  `${MONGODB_BASE_URL}db4?retryWrites=true&w=majority`,
+  {
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
+  }
+);
+db4.on("connected", () => {
+  console.log("✅ DB4 (Finance Employees) connected successfully");
+});
+db4.on("error", (err) => {
+  console.error("❌ DB4 connection error:", err);
+});
+module.exports = { db1, db2, db3, db4 };
