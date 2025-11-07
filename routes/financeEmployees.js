@@ -1,9 +1,14 @@
 const express = require("express");
 const router = express.Router();
 const FinanceEmployee = require("../models/FinanceEmployee");
+const {
+  isAuthenticated,
+  isAdmin,
+  isAdminOrManager,
+} = require("../middleware/auth");
 
 // Get all finance employees
-router.get("/", async (req, res) => {
+router.get("/", isAuthenticated, async (req, res) => {
   try {
     const employees = await FinanceEmployee.find();
     res.json(employees);
@@ -13,7 +18,7 @@ router.get("/", async (req, res) => {
 });
 
 // Add new finance employee
-router.post("/", async (req, res) => {
+router.post("/", isAuthenticated, isAdminOrManager,async (req, res) => {
   const employee = new FinanceEmployee(req.body);
   try {
     const newEmployee = await employee.save();
@@ -24,7 +29,7 @@ router.post("/", async (req, res) => {
 });
 
 // Get specific finance employee
-router.get("/:id", async (req, res) => {
+router.get("/:id", isAuthenticated, async (req, res) => {
   try {
     const employee = await FinanceEmployee.findById(req.params.id);
     if (employee) {
@@ -38,7 +43,7 @@ router.get("/:id", async (req, res) => {
 });
 
 // Update finance employee
-router.patch("/:id", async (req, res) => {
+router.patch("/:id", isAuthenticated, isAdminOrManager, async (req, res) => {
   try {
     const employee = await FinanceEmployee.findById(req.params.id);
     if (employee) {
@@ -54,7 +59,7 @@ router.patch("/:id", async (req, res) => {
 });
 
 // Delete finance employee
-router.delete("/:id", async (req, res) => {
+router.delete("/:id",isAuthenticated, isAdmin, async (req, res) => {
   try {
     const employee = await FinanceEmployee.findById(req.params.id);
     if (employee) {

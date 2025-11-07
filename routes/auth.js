@@ -100,7 +100,7 @@ router.post("/register", async (req, res) => {
 });
 
 // Login user - Checks all databases
-router.post("/login", async (req, res) => {
+router.post("/", async (req, res) => {
   try {
     const { email, password } = req.body;
 
