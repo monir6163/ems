@@ -215,7 +215,7 @@ f:\ems\
 
 ```env
 PORT=5000
-MONGODB_BASE_URL=mongodb+srv://pdf:eCkdJo1drSxeGSuQ@cluster0.r1nyd.mongodb.net/
+MONGODB_BASE_URL=mongodb+srv://<username>:<password>@cluster0.r1nyd.mongodb.net/
 ```
 
 ## 💡 Key Features Explained
