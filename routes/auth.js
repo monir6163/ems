@@ -1,13 +1,16 @@
 const express = require("express");
 const router = express.Router();
 const jwt = require("jsonwebtoken");
-const { db1, db2, db3 } = require("../config/database");
+const { db1, db2, db3, db4, db5, db6 } = require("../config/database");
 const userSchema = require("../models/User");
 
 // Create User models for all three databases
 const UserDB1 = db1.model("User", userSchema);
 const UserDB2 = db2.model("User", userSchema);
 const UserDB3 = db3.model("User", userSchema);
+const UserDB4 = db4.model("User", userSchema);
+const UserDB5 = db5.model("User", userSchema);
+const UserDB6 = db6.model("User", userSchema);
 
 // JWT Secret (in production, use environment variable)
 const JWT_SECRET = process.env.JWT_SECRET;
@@ -41,8 +44,18 @@ router.post("/register", async (req, res) => {
     const existingUserDB1 = await UserDB1.findOne({ email });
     const existingUserDB2 = await UserDB2.findOne({ email });
     const existingUserDB3 = await UserDB3.findOne({ email });
+    const existingUserDB4 = await UserDB4.findOne({ email });
+    const existingUserDB5 = await UserDB5.findOne({ email });
+    const existingUserDB6 = await UserDB6.findOne({ email });
 
-    if (existingUserDB1 || existingUserDB2 || existingUserDB3) {
+    if (
+      existingUserDB1 ||
+      existingUserDB2 ||
+      existingUserDB3 ||
+      existingUserDB4 ||
+      existingUserDB5 ||
+      existingUserDB6
+    ) {
       return res.status(400).json({
         success: false,
         message: "User with this email already exists",
@@ -65,9 +78,19 @@ router.post("/register", async (req, res) => {
     const userDB1 = new UserDB1(userData);
     const userDB2 = new UserDB2(userData);
     const userDB3 = new UserDB3(userData);
+    const userDB4 = new UserDB4(userData);
+    const userDB5 = new UserDB5(userData);
+    const userDB6 = new UserDB6(userData);
 
     // Save to all databases
-    await Promise.all([userDB1.save(), userDB2.save(), userDB3.save()]);
+    await Promise.all([
+      userDB1.save(),
+      userDB2.save(),
+      userDB3.save(),
+      userDB4.save(),
+      userDB5.save(),
+      userDB6.save(),
+    ]);
 
     // Generate JWT token
     const token = jwt.sign(
@@ -83,6 +106,9 @@ router.post("/register", async (req, res) => {
         db1: "User created in Departments database",
         db2: "User created in IT Employees database",
         db3: "User created in HR Employees database",
+        db4: "User created in Finance Employees database",
+        db5: "User created in Attendance Employees database",
+        db6: "User created in Payroll Employees database",
       },
       data: {
         user: userDB1.toJSON(),

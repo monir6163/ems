@@ -12,7 +12,7 @@ const {
 const ITEmployee = db2.model("ITEmployee", itEmployeeSchema);
 
 // Get all IT employees (accessible by all authenticated users)
-router.get("/", isAuthenticated, async (req, res) => {
+router.get("/", isAuthenticated, isAdminOrManager, async (req, res) => {
   try {
     const employees = await ITEmployee.find();
     res.json({
@@ -30,7 +30,7 @@ router.get("/", isAuthenticated, async (req, res) => {
 });
 
 // Get single IT employee by ID (accessible by all authenticated users)
-router.get("/:id", isAuthenticated, async (req, res) => {
+router.get("/:id", isAuthenticated, isAdminOrManager, async (req, res) => {
   try {
     const employee = await ITEmployee.findOne({ employeeId: req.params.id });
     if (!employee) {
@@ -116,8 +116,12 @@ router.delete("/:id", isAuthenticated, isAdmin, async (req, res) => {
     res.json({
       success: true,
       message: "IT Employee deleted successfully",
-      data: employee,
-      deletedBy: req.user.email,
+      data: null,
+      deletedBy: {
+        email: req.user.email,
+        role: req.user.role,
+        timestamp: new Date(),
+      },
     });
   } catch (error) {
     res.status(500).json({

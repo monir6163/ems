@@ -68,4 +68,35 @@ db4.on("connected", () => {
 db4.on("error", (err) => {
   console.error("❌ DB4 connection error:", err);
 });
-module.exports = { db1, db2, db3, db4 };
+
+// Database 5: Attendance
+const db5 = mongoose.createConnection(
+  `${MONGODB_BASE_URL}db5?retryWrites=true&w=majority`,
+  {
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
+  }
+);
+db5.on("connected", () => {
+  console.log("✅ DB5 (Attendance) connected successfully");
+});
+db5.on("error", (err) => {
+  console.error("❌ DB5 connection error:", err);
+});
+
+// Database 6: Payroll
+const db6 = mongoose.createConnection(
+  `${MONGODB_BASE_URL}db6?retryWrites=true&w=majority`,
+  {
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
+  }
+);
+db6.on("connected", () => {
+  console.log("✅ DB6 (Payroll) connected successfully");
+});
+db6.on("error", (err) => {
+  console.error("❌ DB6 connection error:", err);
+});
+
+module.exports = { db1, db2, db3, db4, db5, db6 };

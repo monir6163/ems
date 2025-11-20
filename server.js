@@ -4,7 +4,7 @@ const bodyParser = require("body-parser");
 require("dotenv").config();
 
 // Import database connections
-const { db1, db2, db3, db4 } = require("./config/database");
+const { db1, db2, db3, db4, db5, db6 } = require("./config/database");
 
 // Import routes
 const departmentRoutes = require("./routes/departments");
@@ -12,6 +12,8 @@ const itEmployeeRoutes = require("./routes/itEmployees");
 const hrEmployeeRoutes = require("./routes/hrEmployees");
 const financeEmployeeRoutes = require("./routes/financeEmployees");
 const authRoutes = require("./routes/auth");
+const attendanceRoutes = require("./routes/attendance");
+const payrollRoutes = require("./routes/payroll");
 
 const app = express();
 
@@ -30,6 +32,8 @@ app.get("/", (req, res) => {
       db2: "IT Employees Database",
       db3: "HR Employees Database",
       db4: "Finance Employees Database",
+      db5: "Attendance Database",
+      db6: "Payroll Database",
     },
     endpoints: {
       auth: "/api/auth",
@@ -37,6 +41,8 @@ app.get("/", (req, res) => {
       itEmployees: "/api/it-employees",
       hrEmployees: "/api/hr-employees",
       financeEmployees: "/api/finance-employees",
+      attendance: "/api/attendance",
+      payroll: "/api/payroll",
     },
   });
 });
@@ -47,6 +53,8 @@ app.use("/api/departments", departmentRoutes);
 app.use("/api/it-employees", itEmployeeRoutes);
 app.use("/api/hr-employees", hrEmployeeRoutes);
 app.use("/api/finance-employees", financeEmployeeRoutes);
+app.use("/api/attendance", attendanceRoutes);
+app.use("/api/payroll", payrollRoutes);
 
 // Health check endpoint
 app.get("/health", (req, res) => {
@@ -55,6 +63,8 @@ app.get("/health", (req, res) => {
     db2: db2.readyState === 1 ? "Connected" : "Disconnected",
     db3: db3.readyState === 1 ? "Connected" : "Disconnected",
     db4: db4.readyState === 1 ? "Connected" : "Disconnected",
+    db5: db5.readyState === 1 ? "Connected" : "Disconnected",
+    db6: db6.readyState === 1 ? "Connected" : "Disconnected",
   };
 
   res.json({
@@ -91,7 +101,11 @@ app.listen(PORT, () => {
   console.log(`   - Departments: http://localhost:${PORT}/api/departments`);
   console.log(`   - IT Employees: http://localhost:${PORT}/api/it-employees`);
   console.log(`   - HR Employees: http://localhost:${PORT}/api/hr-employees`);
-  console.log(`   - Finance Employees: http://localhost:${PORT}/api/finance-employees`);
+  console.log(
+    `   - Finance Employees: http://localhost:${PORT}/api/finance-employees`
+  );
+  console.log(`   - Attendance: http://localhost:${PORT}/api/attendance`);
+  console.log(`   - Payroll: http://localhost:${PORT}/api/payroll`);
   console.log(`   - Health Check: http://localhost:${PORT}/health`);
 });
 
