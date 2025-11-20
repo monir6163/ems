@@ -48,7 +48,6 @@ router.post(
         bonus,
         deductions,
       } = req.body;
-
       if (
         !employeeId ||
         !employeeName ||
